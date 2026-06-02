@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">DailyQuest</string>
+    <string name="title_activity_main">DailyQuest</string>
+    <string name="package_name">com.dailyquest.app</string>
+    <string name="custom_url_scheme">com.dailyquest.app</string>
+</resources>
