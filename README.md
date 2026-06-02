@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DailyQuest
 
-## Getting Started
+DailyQuest adalah aplikasi produktivitas bergaya RPG berbasis Next.js.
+Project ini sudah disiapkan untuk:
 
-First, run the development server:
+- berjalan di web (deploy di Vercel),
+- installable sebagai PWA di HP/desktop,
+- dan bisa dilanjutkan ke APK/iOS app via Capacitor.
+
+## 1) Jalankan Lokal
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Lalu buka `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 2) Deploy Web ke Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Push project ke GitHub.
+2. Import repository di [Vercel](https://vercel.com/new).
+3. Set Environment Variables di Vercel:
+   - `DATABASE_URL`
+   - `NEXTAUTH_SECRET`
+   - `NEXTAUTH_URL` (isi URL production, contoh `https://dailyquest.vercel.app`)
+4. Deploy.
 
-## Learn More
+Setelah deploy sukses, app otomatis bisa diakses dari web.
 
-To learn more about Next.js, take a look at the following resources:
+## 3) Install sebagai Aplikasi di HP (PWA)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+PWA sudah aktif di project ini (manifest + service worker).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Android (Chrome)**: buka website > menu > `Add to Home screen`.
+- **iPhone (Safari)**: buka website > Share > `Add to Home Screen`.
 
-## Deploy on Vercel
+App akan tampil seperti aplikasi native (standalone mode).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 4) Publish ke Play Store / App Store (opsional)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Karena app ini Next.js (SSR + API), mobile build memuat **URL production** di WebView native:
+
+```bash
+npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/ios
+set CAPACITOR_SERVER_URL=https://YOUR-APP.vercel.app
+npx cap add android
+npx cap add ios
+npx cap sync
+npx cap open android
+```
+
+Lanjutkan signing di Android Studio (`.aab`) / Xcode untuk iOS.
+
+## Catatan Penting Production
+
+- Gunakan database production (PostgreSQL) yang stabil.
+- Pastikan URL callback auth mengarah ke domain production.
+- Jalankan migration sebelum go-live.

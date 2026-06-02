@@ -1,0 +1,9 @@
+{
+  "appId": "com.dailyquest.app",
+  "appName": "DailyQuest",
+  "webDir": "public",
+  "server": {
+    "url": "https://dailyquest.vercel.app",
+    "cleartext": false
+  }
+}

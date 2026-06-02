@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String?
+  email         String     @unique
+  password      String
+  xp            Int        @default(0)
+  level         Int        @default(1)
+  streak        Int        @default(0)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  highestStreak Int        @default(0)
+  quests        Quest[]
+  logs          QuestLog[]
+}
+
+model Quest {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  type        String     @default("Daily Quest")
+  rarity      String     @default("common")
+  xp          Int        @default(50)
+  completed   Boolean    @default(false)
+  userId      String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs        QuestLog[]
+}
+
+model QuestLog {
+  id        String   @id @default(cuid())
+  status    String   @default("completed")
+  xpEarned  Int
+  userId    String
+  questId   String
+  createdAt DateTime @default(now())
+  quest     Quest    @relation(fields: [questId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
