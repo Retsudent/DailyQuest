@@ -154,6 +154,7 @@ export default function QuestList({ search, filter, reloadToken = 0 }: QuestList
       <QuestDetailModal 
         isOpen={!!selectedQuest}
         onClose={() => setSelectedQuest(null)}
+        onQuestChanged={fetchQuests}
         quest={selectedQuest as any}
       />
     </>

@@ -7,6 +7,7 @@ import { X, Sword, Shield, Zap, Star, Trophy, Trash2, Edit3, CheckCircle2, Clock
 interface QuestDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onQuestChanged?: () => void;
   quest: {
     id: string;
     title: string;
@@ -32,7 +33,7 @@ const rarityConfig = {
   legendary: { color: "text-amber-400", border: "border-amber-500/30", bg: "bg-amber-500/10", icon: Star },
 } as const;
 
-export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetailModalProps) {
+export default function QuestDetailModal({ isOpen, onClose, onQuestChanged, quest }: QuestDetailModalProps) {
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -69,7 +70,7 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
       });
       if (res.ok) {
         onClose();
-        window.location.reload();
+        onQuestChanged?.();
       }
     } catch (error) {
       console.error("Failed to complete quest:", error);
@@ -90,7 +91,7 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
       if (res.ok) {
         setIsEditing(false);
         onClose();
-        window.location.reload();
+        onQuestChanged?.();
       }
     } catch (error) {
       console.error("Failed to update quest:", error);
@@ -108,7 +109,7 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
       });
       if (res.ok) {
         onClose();
-        window.location.reload();
+        onQuestChanged?.();
       }
     } catch (error) {
       console.error("Failed to delete quest:", error);
