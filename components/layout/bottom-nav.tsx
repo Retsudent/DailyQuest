@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, ScrollText, BarChart3, Settings } from "lucide-react";
+import { LayoutDashboard, ScrollText, BookOpen, BarChart3, Settings } from "lucide-react";
 import { motion } from "framer-motion";
 
 const menus = [
   { name: "Home", href: "/dashboard", icon: LayoutDashboard },
   { name: "Quests", href: "/quest", icon: ScrollText },
+  { name: "History", href: "/history", icon: BookOpen },
   { name: "Stats", href: "/statistics", icon: BarChart3 },
   { name: "Settings", href: "/settings", icon: Settings },
 ];
