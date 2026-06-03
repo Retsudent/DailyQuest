@@ -57,7 +57,7 @@ export default function QuestsPage() {
           <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none" />
           <Navbar />
 
-          <div className="themed-scrollbar flex-1 overflow-y-auto p-4 md:p-8 z-10">
+          <div className="themed-scrollbar flex-1 overflow-y-auto p-4 pb-28 md:p-8 z-10">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

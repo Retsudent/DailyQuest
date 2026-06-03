@@ -123,7 +123,7 @@ export default function DashboardPage() {
           
           <Navbar />
 
-          <div className="themed-scrollbar flex-1 overflow-y-auto p-4 md:p-8 z-10">
+          <div className="themed-scrollbar flex-1 overflow-y-auto p-4 pb-28 md:p-8 z-10">
           <motion.div variants={container} initial="hidden" animate="show" className="max-w-6xl mx-auto space-y-8">
             
             {/* Character Profile Header */}
