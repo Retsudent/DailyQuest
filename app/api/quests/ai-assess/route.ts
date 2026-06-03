@@ -63,30 +63,28 @@ Return ONLY valid JSON like this (no markdown, no explanation):
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
           temperature: 0.2,
-          maxOutputTokens: 100,
-          responseMimeType: "application/json",
+          maxOutputTokens: 150,
         },
       }),
     });
 
+    const geminiData = await geminiRes.json();
+
     if (!geminiRes.ok) {
-      const errBody = await geminiRes.json().catch(() => geminiRes.text());
-      console.error("Gemini API error:", geminiRes.status, errBody);
-      // Return full error detail so we can debug
+      console.error("Gemini API error:", geminiRes.status, JSON.stringify(geminiData));
       return NextResponse.json(
-        { error: `Gemini API returned ${geminiRes.status}`, detail: errBody },
+        { error: `Gemini API returned ${geminiRes.status}`, detail: geminiData },
         { status: 500 }
       );
     }
 
-    const geminiData = await geminiRes.json();
     const rawText: string =
       geminiData?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
 
     if (!rawText) {
       console.error("Empty Gemini response:", JSON.stringify(geminiData));
       return NextResponse.json(
-        { error: "Empty response from AI" },
+        { error: "Empty response from AI", detail: geminiData },
         { status: 500 }
       );
     }
