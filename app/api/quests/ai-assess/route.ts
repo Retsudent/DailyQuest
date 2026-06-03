@@ -54,7 +54,7 @@ Return ONLY valid JSON like this (no markdown, no explanation):
 {"rarity":"rare","xp":120}`;
 
     // Use Gemini REST API directly for maximum compatibility
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     const geminiRes = await fetch(geminiUrl, {
       method: "POST",
