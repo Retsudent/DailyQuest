@@ -76,13 +76,14 @@ export default function ActivityChart({ data, loading }: ActivityChartProps) {
         </select>
       </div>
 
-      <div className="h-60 sm:h-72 flex items-end justify-between gap-2 sm:gap-4 relative z-10">
-        {loading ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-2xl animate-pulse">
-            <div className="w-12 h-12 rounded-full border-4 border-cyan-500/20 border-t-cyan-500 animate-spin" />
-          </div>
-        ) : (
-          <AnimatePresence mode="popLayout">
+      <div className="overflow-x-auto overflow-y-hidden themed-scrollbar pb-4 relative z-10">
+        <div className="min-w-[600px] h-60 sm:h-72 flex items-end justify-between gap-2 sm:gap-4 relative">
+          {loading ? (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-2xl animate-pulse">
+              <div className="w-12 h-12 rounded-full border-4 border-cyan-500/20 border-t-cyan-500 animate-spin" />
+            </div>
+          ) : (
+            <AnimatePresence mode="popLayout">
             {chartData.map((data, i) => {
               const heightPercent = (data.value / maxValue) * 100;
               return (
@@ -123,8 +124,9 @@ export default function ActivityChart({ data, loading }: ActivityChartProps) {
                 </motion.div>
               );
             })}
-          </AnimatePresence>
-        )}
+            </AnimatePresence>
+          )}
+        </div>
       </div>
     </motion.div>
   );

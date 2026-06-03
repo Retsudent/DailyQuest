@@ -35,6 +35,36 @@ export async function PATCH(
     // If marking as completed, create a log and update user XP
     if (completed && !quest.completed) {
       console.log("Processing quest completion for ID:", id);
+      
+      const isDaily = quest.type === "Daily Quest" || quest.type?.toLowerCase() === "daily";
+      let newStreak = user.streak || 0;
+      let newHighestStreak = user.highestStreak || 0;
+      let isStreakIncremented = false;
+      
+      if (isDaily) {
+        // Fetch all daily quests for this user to check if this is the last one
+        const allDailyQuests = await db.quest.findMany({
+          where: {
+            userId: user.id,
+            OR: [
+              { type: "Daily Quest" },
+              { type: "daily" }
+            ]
+          }
+        });
+
+        const otherDailyQuests = allDailyQuests.filter(q => q.id !== id);
+        const allOthersCompleted = otherDailyQuests.length === 0 || otherDailyQuests.every(q => q.completed);
+
+        if (allOthersCompleted) {
+          newStreak += 1;
+          if (newStreak > newHighestStreak) {
+            newHighestStreak = newStreak;
+          }
+          isStreakIncremented = true;
+        }
+      }
+
       await db.$transaction([
         db.quest.update({
           where: { id: id },
@@ -52,6 +82,10 @@ export async function PATCH(
           where: { id: user.id },
           data: {
             xp: { increment: quest.xp },
+            ...(isStreakIncremented && {
+              streak: newStreak,
+              highestStreak: newHighestStreak,
+            }),
           },
         }),
       ]);

@@ -96,13 +96,14 @@ export default function LineChartStats({ data, loading }: LineChartStatsProps) {
         </select>
       </div>
 
-      <div className="relative w-full h-[240px] flex-1 z-10">
-        {loading ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-2xl animate-pulse">
-            <div className="w-12 h-12 rounded-full border-4 border-purple-500/20 border-t-purple-500 animate-spin" />
-          </div>
-        ) : (
-          <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible" preserveAspectRatio="none">
+      <div className="relative w-full overflow-x-auto overflow-y-hidden themed-scrollbar pb-4 z-10">
+        <div className="min-w-[600px] h-[240px] relative">
+          {loading ? (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-2xl animate-pulse">
+              <div className="w-12 h-12 rounded-full border-4 border-purple-500/20 border-t-purple-500 animate-spin" />
+            </div>
+          ) : (
+            <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible" preserveAspectRatio="none">
             <defs>
               <linearGradient id="lineGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="rgba(168, 85, 247, 0.4)" />
@@ -215,8 +216,9 @@ export default function LineChartStats({ data, loading }: LineChartStatsProps) {
                 {p.label}
               </text>
             ))}
-          </svg>
-        )}
+            </svg>
+          )}
+        </div>
       </div>
     </motion.div>
   );

@@ -79,11 +79,23 @@ export default function DashboardPage() {
     redirect("/login");
   }
 
-  const xp = userStats?.xp || 0;
-  const level = userStats?.level || 1;
+  const totalXp = userStats?.xp || 0;
+  const level = Math.floor(totalXp / 1000) + 1;
+  const currentLevelXp = totalXp % 1000;
+  const xpMax = 1000;
+  const xpPercentage = Math.min(100, Math.max(0, (currentLevelXp / xpMax) * 100));
   const streak = userStats?.streak || 0;
-  const xpMax = level * 1000; // Example level curve
-  const xpPercentage = (xp / xpMax) * 100;
+
+  const getTitle = (lvl: number) => {
+    if (lvl < 5) return "Novice Explorer";
+    if (lvl < 10) return "Seasoned Adventurer";
+    if (lvl < 20) return "Quest Master";
+    return "Legendary Hero";
+  };
+
+  const totalQuests = quests.length;
+  const epicQuests = quests.filter(q => q.rarity === "epic" || q.rarity === "legendary").length;
+  const mastery = quests.length > 0 ? Math.round((quests.filter(q => q.completed).length / quests.length) * 100) : 0;
 
   // Animation variants
   const container = {
@@ -130,7 +142,7 @@ export default function DashboardPage() {
                     </span>
                   </div>
                   <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-black border border-purple-500/50 rounded-full text-xs font-bold text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.4)] whitespace-nowrap">
-                    {level < 5 ? "Novice Explorer" : "Master Adventurer"}
+                    {getTitle(level)}
                   </div>
                 </div>
 
@@ -147,7 +159,7 @@ export default function DashboardPage() {
                   <div className="mt-6">
                     <div className="flex justify-between text-sm font-bold text-zinc-400 mb-2">
                       <span className="text-purple-400">EXP</span>
-                      <span>{xp} / {xpMax}</span>
+                      <span>{currentLevelXp} / {xpMax}</span>
                     </div>
                     {/* Animated XP Bar */}
                     <div className="h-4 w-full bg-zinc-900 rounded-full overflow-hidden border border-white/5 relative shadow-inner">
@@ -169,10 +181,10 @@ export default function DashboardPage() {
             {/* RPG Stat Blocks */}
             <motion.div variants={container} className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { label: "Total Quests", value: "148", icon: Trophy, color: "text-yellow-400", bg: "bg-yellow-400/10", border: "border-yellow-400/20" },
-                { label: "Current Level", value: "3", icon: Star, color: "text-purple-400", bg: "bg-purple-400/10", border: "border-purple-400/20" },
-                { label: "Epic Quests", value: "12", icon: Zap, color: "text-blue-400", bg: "bg-blue-400/10", border: "border-blue-400/20" },
-                { label: "Mastery", value: "18%", icon: Target, color: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/20" },
+                { label: "Total Quests", value: totalQuests.toString(), icon: Trophy, color: "text-yellow-400", bg: "bg-yellow-400/10", border: "border-yellow-400/20" },
+                { label: "Current Level", value: level.toString(), icon: Star, color: "text-purple-400", bg: "bg-purple-400/10", border: "border-purple-400/20" },
+                { label: "Epic Quests", value: epicQuests.toString(), icon: Zap, color: "text-blue-400", bg: "bg-blue-400/10", border: "border-blue-400/20" },
+                { label: "Mastery", value: `${mastery}%`, icon: Target, color: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/20" },
               ].map((stat, i) => (
                 <motion.div key={i} variants={item} whileHover={{ y: -5, scale: 1.02 }} className={`relative p-5 rounded-2xl bg-black/40 border ${stat.border} backdrop-blur-xl group overflow-hidden`}>
                   <div className={`absolute top-0 right-0 w-16 h-16 ${stat.bg} rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-150 duration-500`} />
@@ -185,15 +197,16 @@ export default function DashboardPage() {
 
             {/* Active Quests Mission Board */}
             <motion.div variants={item} className="rounded-3xl border border-white/10 bg-black/40 backdrop-blur-xl p-6 md:p-8">
-              <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
-                <h2 className="text-2xl font-black text-white flex items-center gap-3">
-                  <span className="w-2 h-8 bg-purple-500 rounded-full" /> Mission Board
+              <div className="flex flex-row items-center justify-between gap-4 mb-6 border-b border-white/10 pb-4">
+                <h2 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3 leading-tight">
+                  <span className="w-1.5 sm:w-2 h-6 sm:h-8 bg-purple-500 rounded-full shrink-0" /> 
+                  <span>Mission<br className="sm:hidden" /> Board</span>
                 </h2>
                 <motion.button 
                   onClick={() => setIsAddModalOpen(true)}
                   whileHover={{ scale: 1.05 }} 
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold shadow-[0_4px_0_rgb(126,34,206)] hover:shadow-[0_2px_0_rgb(126,34,206)] hover:translate-y-[2px] transition-all active:shadow-none active:translate-y-1"
+                  className="px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold shadow-[0_4px_0_rgb(126,34,206)] hover:shadow-[0_2px_0_rgb(126,34,206)] hover:translate-y-[2px] transition-all active:shadow-none active:translate-y-1 text-sm sm:text-base shrink-0"
                 >
                   ACCEPT NEW
                 </motion.button>
@@ -209,43 +222,43 @@ export default function DashboardPage() {
                         key={quest.id} 
                         onClick={() => setSelectedQuest(quest)}
                         whileHover={{ scale: 1.01, x: 5 }}
-                        className={`group relative p-4 rounded-2xl border ${quest.completed ? 'border-zinc-800 bg-zinc-900/50 opacity-50' : conf.border + ' bg-black/50 hover:bg-white/[0.02]'} backdrop-blur-sm transition-all duration-300 flex items-center justify-between cursor-pointer`}
+                        className={`group relative p-3 sm:p-4 rounded-2xl border ${quest.completed ? 'border-zinc-800 bg-zinc-900/50 opacity-50' : conf.border + ' bg-black/50 hover:bg-white/[0.02]'} backdrop-blur-sm transition-all duration-300 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-0 justify-between cursor-pointer overflow-hidden`}
                       >
                         {/* Hover Glow */}
                         {!quest.completed && <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] pointer-events-none rounded-2xl`} />}
                         
-                        <div className="flex items-center gap-4 z-10">
-                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${quest.completed ? 'bg-zinc-800 text-zinc-600' : conf.bg + ' ' + conf.text} shadow-inner`}>
-                            <Icon size={24} />
+                        <div className="flex items-start sm:items-center gap-3 sm:gap-4 z-10 w-full sm:w-auto flex-1 min-w-0">
+                          <div className={`w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl flex items-center justify-center ${quest.completed ? 'bg-zinc-800 text-zinc-600' : conf.bg + ' ' + conf.text} shadow-inner`}>
+                            <Icon size={20} className="sm:w-6 sm:h-6" />
                           </div>
-                          <div>
-                            <h3 className={`font-bold text-lg ${quest.completed ? 'text-zinc-500 line-through' : 'text-white'}`}>
+                          <div className="flex-1 min-w-0 pr-2">
+                            <h3 className={`font-bold text-base sm:text-lg leading-tight mb-1.5 ${quest.completed ? 'text-zinc-500 line-through' : 'text-white'} break-words`}>
                               {quest.title}
                             </h3>
-                            <div className="flex gap-2 mt-1">
-                              <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-md border ${quest.completed ? 'border-zinc-700 text-zinc-500' : conf.border + ' ' + conf.text}`}>
+                            <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                              <span className={`text-[9px] sm:text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-md border ${quest.completed ? 'border-zinc-700 text-zinc-500' : conf.border + ' ' + conf.text}`}>
                                 {quest.rarity}
                               </span>
-                              <span className="text-[10px] uppercase tracking-wider font-bold text-yellow-500 px-2 py-0.5 rounded-md bg-yellow-500/10 border border-yellow-500/20">
+                              <span className="text-[9px] sm:text-[10px] uppercase tracking-wider font-bold text-yellow-500 px-2 py-0.5 rounded-md bg-yellow-500/10 border border-yellow-500/20">
                                 +{quest.xp} EXP
                               </span>
                             </div>
                           </div>
                         </div>
 
-                        <div className="z-10 flex items-center gap-3">
+                        <div className="z-10 flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end shrink-0 sm:pl-4">
                           <button 
                             onClick={(e) => {
                               e.stopPropagation();
                               setSelectedQuest(quest);
                             }}
-                            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-blue-500/20 border border-white/10 hover:border-blue-500/50 text-zinc-400 hover:text-blue-400 flex items-center justify-center transition-all shadow-lg"
+                            className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 hover:bg-blue-500/20 border border-white/10 hover:border-blue-500/50 text-zinc-400 hover:text-blue-400 flex items-center justify-center transition-all shadow-lg shrink-0"
                           >
-                            <Eye size={18} />
+                            <Eye size={16} className="sm:w-[18px] sm:h-[18px]" />
                           </button>
 
                           {quest.completed ? (
-                            <div className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-500 text-sm font-bold">
+                            <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-zinc-800 text-zinc-500 text-xs sm:text-sm font-bold whitespace-nowrap shrink-0">
                               CLEARED
                             </div>
                           ) : (
@@ -254,9 +267,9 @@ export default function DashboardPage() {
                                 e.stopPropagation();
                                 handleComplete(quest.id);
                               }}
-                              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/50 text-zinc-400 hover:text-emerald-400 flex items-center justify-center transition-all shadow-lg"
+                              className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/50 text-zinc-400 hover:text-emerald-400 flex items-center justify-center transition-all shadow-lg shrink-0"
                             >
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                             </button>
                           )}
                         </div>

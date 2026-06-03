@@ -56,7 +56,7 @@ export default function QuestFilters({
       </div>
 
       {/* Filter Tabs - RPG Inventory style */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 hide-scrollbar -mx-6 px-6 sm:mx-0 sm:px-0">
+      <div className="flex flex-wrap items-center gap-2 pb-2 lg:pb-0">
         {tabs.map((tab) => (
           <motion.button 
             key={tab.key}
