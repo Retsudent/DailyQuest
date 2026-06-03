@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sword, Shield, Zap, Star, Trophy, Sparkles } from "lucide-react";
+import { X, Sword, Shield, Zap, Star, Trophy, Sparkles, Wand2, Swords } from "lucide-react";
 import { notify } from "@/lib/ui/toast";
 
 interface AddQuestModalProps {
@@ -18,16 +18,49 @@ const rarities = [
   { id: "legendary", name: "Legendary", icon: Star, color: "text-amber-400", border: "border-amber-500/30", bg: "bg-amber-500/10" },
 ] as const;
 
-import { Swords } from "lucide-react";
 
 export default function AddQuestModal({ isOpen, onClose, onCreated }: AddQuestModalProps) {
   const [loading, setLoading] = useState(false);
+  const [isAssessing, setIsAssessing] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     type: "Daily Quest",
     rarity: "common",
     xp: 50,
   });
+
+  const handleAIAssess = async () => {
+    if (!formData.title) {
+      notify("Please enter a mission title first", "error");
+      return;
+    }
+    
+    setIsAssessing(true);
+    try {
+      const res = await fetch("/api/quests/ai-assess", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: formData.title }),
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        setFormData(prev => ({
+          ...prev,
+          rarity: data.rarity || prev.rarity,
+          xp: data.xp || prev.xp
+        }));
+        notify("AI evaluated mission difficulty!", "success");
+      } else {
+        notify("Failed to get AI assessment", "error");
+      }
+    } catch (error) {
+      console.error("AI assess error:", error);
+      notify("Error contacting AI oracle", "error");
+    } finally {
+      setIsAssessing(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,7 +132,18 @@ export default function AddQuestModal({ isOpen, onClose, onCreated }: AddQuestMo
             <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
               {/* Title Input */}
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-zinc-300 uppercase tracking-widest ml-1">Mission Title</label>
+                <div className="flex items-center justify-between ml-1">
+                  <label className="text-[10px] font-black text-zinc-300 uppercase tracking-widest">Mission Title</label>
+                  <button 
+                    type="button"
+                    onClick={handleAIAssess}
+                    disabled={isAssessing || !formData.title}
+                    className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-purple-400 hover:text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 px-2.5 py-1 rounded-md transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-purple-500/20"
+                  >
+                    <Wand2 size={12} className={isAssessing ? "animate-pulse" : ""} />
+                    {isAssessing ? "Consulting Oracle..." : "AI Auto-Assess"}
+                  </button>
+                </div>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-4 flex items-center text-zinc-600 group-focus-within:text-blue-400 transition-colors">
                     <Sparkles size={16} />
