@@ -99,26 +99,38 @@ export default function Hero() {
               <div className="p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="col-span-2 space-y-4">
                   <div className="h-4 w-1/3 bg-purple-500/20 rounded animate-pulse" />
-                  <div className="h-24 w-full bg-zinc-900/80 rounded-xl border border-white/5 flex items-center p-4 gap-4">
+                  <motion.div 
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                    className="h-24 w-full bg-zinc-900/80 rounded-xl border border-white/5 flex items-center p-4 gap-4 shadow-lg"
+                  >
                     <div className="w-12 h-12 rounded-lg bg-orange-500/20 flex-shrink-0" />
                     <div className="space-y-2 flex-1">
                       <div className="h-3 w-1/2 bg-white/10 rounded" />
                       <div className="h-2 w-1/4 bg-white/5 rounded" />
                     </div>
-                  </div>
-                  <div className="h-24 w-full bg-zinc-900/80 rounded-xl border border-white/5 flex items-center p-4 gap-4">
+                  </motion.div>
+                  <motion.div 
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                    className="h-24 w-full bg-zinc-900/80 rounded-xl border border-white/5 flex items-center p-4 gap-4 shadow-lg"
+                  >
                     <div className="w-12 h-12 rounded-lg bg-blue-500/20 flex-shrink-0" />
                     <div className="space-y-2 flex-1">
                       <div className="h-3 w-3/4 bg-white/10 rounded" />
                       <div className="h-2 w-1/3 bg-white/5 rounded" />
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
                 <div className="space-y-4">
                   <div className="h-4 w-1/2 bg-blue-500/20 rounded animate-pulse" />
-                  <div className="h-40 w-full bg-zinc-900/80 rounded-xl border border-white/5 relative overflow-hidden">
+                  <motion.div 
+                    animate={{ y: [0, -5, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    className="h-40 w-full bg-zinc-900/80 rounded-xl border border-white/5 relative overflow-hidden shadow-lg"
+                  >
                     <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-blue-500/20 to-transparent" />
-                  </div>
+                  </motion.div>
                 </div>
               </div>
             </div>

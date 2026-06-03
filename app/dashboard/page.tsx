@@ -7,7 +7,7 @@ import Sidebar from "@/components/layout/sidebar";
 import Navbar from "@/components/layout/navbarin";
 import AddQuestModal from "@/components/quest/AddQuestModal";
 import QuestDetailModal from "@/components/quest/QuestDetailModal";
-import { Flame, Trophy, Star, Shield, Zap, Target, Eye } from "lucide-react";
+import { Flame, Trophy, Star, Shield, Zap, Target, Eye, Lock } from "lucide-react";
 import { motion } from "framer-motion";
 
 
@@ -214,69 +214,117 @@ export default function DashboardPage() {
 
               <div className="themed-scrollbar max-h-[500px] overflow-y-auto pr-2">
                 <div className="space-y-4">
-                  {quests.map((quest) => {
-                    const conf = rarityConfig[quest.rarity] || rarityConfig.common;
-                    const Icon = conf.icon;
-                    return (
-                      <motion.div 
-                        key={quest.id} 
-                        onClick={() => setSelectedQuest(quest)}
-                        whileHover={{ scale: 1.01, x: 5 }}
-                        className={`group relative p-3 sm:p-4 rounded-2xl border ${quest.completed ? 'border-zinc-800 bg-zinc-900/50 opacity-50' : conf.border + ' bg-black/50 hover:bg-white/[0.02]'} backdrop-blur-sm transition-all duration-300 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-0 justify-between cursor-pointer overflow-hidden`}
+                  {quests.length === 0 ? (
+                    <div className="py-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-white/10 rounded-2xl bg-black/20">
+                      <div className="w-20 h-20 bg-purple-500/10 rounded-full flex items-center justify-center mb-4 border border-purple-500/20 shadow-lg">
+                        <Flame className="text-purple-400/50" size={32} />
+                      </div>
+                      <h3 className="text-xl font-black text-zinc-300 uppercase tracking-widest mb-2">No Active Quests</h3>
+                      <p className="text-zinc-500 mb-6 max-w-sm text-sm">Your mission board is empty. Accept a new quest to continue your journey and earn EXP.</p>
+                      <button 
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="px-6 py-2.5 rounded-xl bg-purple-600/20 hover:bg-purple-600 border border-purple-500/50 text-purple-300 hover:text-white font-bold uppercase tracking-wider transition-all"
                       >
-                        {/* Hover Glow */}
-                        {!quest.completed && <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] pointer-events-none rounded-2xl`} />}
-                        
-                        <div className="flex items-start sm:items-center gap-3 sm:gap-4 z-10 w-full sm:w-auto flex-1 min-w-0">
-                          <div className={`w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl flex items-center justify-center ${quest.completed ? 'bg-zinc-800 text-zinc-600' : conf.bg + ' ' + conf.text} shadow-inner`}>
-                            <Icon size={20} className="sm:w-6 sm:h-6" />
-                          </div>
-                          <div className="flex-1 min-w-0 pr-2">
-                            <h3 className={`font-bold text-base sm:text-lg leading-tight mb-1.5 ${quest.completed ? 'text-zinc-500 line-through' : 'text-white'} break-words`}>
-                              {quest.title}
-                            </h3>
-                            <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                              <span className={`text-[9px] sm:text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-md border ${quest.completed ? 'border-zinc-700 text-zinc-500' : conf.border + ' ' + conf.text}`}>
-                                {quest.rarity}
-                              </span>
-                              <span className="text-[9px] sm:text-[10px] uppercase tracking-wider font-bold text-yellow-500 px-2 py-0.5 rounded-md bg-yellow-500/10 border border-yellow-500/20">
-                                +{quest.xp} EXP
-                              </span>
+                        Find Quests
+                      </button>
+                    </div>
+                  ) : (
+                    quests.map((quest) => {
+                      const conf = rarityConfig[quest.rarity] || rarityConfig.common;
+                      const Icon = conf.icon;
+                      return (
+                        <motion.div 
+                          key={quest.id} 
+                          onClick={() => setSelectedQuest(quest)}
+                          whileHover={{ scale: 1.01, x: 5 }}
+                          className={`group relative p-3 sm:p-4 rounded-2xl border ${quest.completed ? 'border-zinc-800 bg-zinc-900/50 opacity-50' : conf.border + ' bg-black/50 hover:bg-white/[0.02]'} backdrop-blur-sm transition-all duration-300 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-0 justify-between cursor-pointer overflow-hidden`}
+                        >
+                          {/* Hover Glow */}
+                          {!quest.completed && <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] pointer-events-none rounded-2xl`} />}
+                          
+                          <div className="flex items-start sm:items-center gap-3 sm:gap-4 z-10 w-full sm:w-auto flex-1 min-w-0">
+                            <div className={`w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl flex items-center justify-center ${quest.completed ? 'bg-zinc-800 text-zinc-600' : conf.bg + ' ' + conf.text} shadow-inner`}>
+                              <Icon size={20} className="sm:w-6 sm:h-6" />
+                            </div>
+                            <div className="flex-1 min-w-0 pr-2">
+                              <h3 className={`font-bold text-base sm:text-lg leading-tight mb-1.5 ${quest.completed ? 'text-zinc-500 line-through' : 'text-white'} break-words`}>
+                                {quest.title}
+                              </h3>
+                              <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                                <span className={`text-[9px] sm:text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-md border ${quest.completed ? 'border-zinc-700 text-zinc-500' : conf.border + ' ' + conf.text}`}>
+                                  {quest.rarity}
+                                </span>
+                                <span className="text-[9px] sm:text-[10px] uppercase tracking-wider font-bold text-yellow-500 px-2 py-0.5 rounded-md bg-yellow-500/10 border border-yellow-500/20">
+                                  +{quest.xp} EXP
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        <div className="z-10 flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end shrink-0 sm:pl-4">
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedQuest(quest);
-                            }}
-                            className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 hover:bg-blue-500/20 border border-white/10 hover:border-blue-500/50 text-zinc-400 hover:text-blue-400 flex items-center justify-center transition-all shadow-lg shrink-0"
-                          >
-                            <Eye size={16} className="sm:w-[18px] sm:h-[18px]" />
-                          </button>
-
-                          {quest.completed ? (
-                            <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-zinc-800 text-zinc-500 text-xs sm:text-sm font-bold whitespace-nowrap shrink-0">
-                              CLEARED
-                            </div>
-                          ) : (
+                          <div className="z-10 flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end shrink-0 sm:pl-4">
                             <button 
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleComplete(quest.id);
+                                setSelectedQuest(quest);
                               }}
-                              className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/50 text-zinc-400 hover:text-emerald-400 flex items-center justify-center transition-all shadow-lg shrink-0"
+                              className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 hover:bg-blue-500/20 border border-white/10 hover:border-blue-500/50 text-zinc-400 hover:text-blue-400 flex items-center justify-center transition-all shadow-lg shrink-0"
                             >
-                              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                              <Eye size={16} className="sm:w-[18px] sm:h-[18px]" />
                             </button>
-                          )}
-                        </div>
-                      </motion.div>
-                    )
-                  })}
+
+                            {quest.completed ? (
+                              <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-zinc-800 text-zinc-500 text-xs sm:text-sm font-bold whitespace-nowrap shrink-0">
+                                CLEARED
+                              </div>
+                            ) : (
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleComplete(quest.id);
+                                }}
+                                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/50 text-zinc-400 hover:text-emerald-400 flex items-center justify-center transition-all shadow-lg shrink-0"
+                              >
+                                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                              </button>
+                            )}
+                          </div>
+                        </motion.div>
+                      )
+                    })
+                  )}
                 </div>
+              </div>
+            </motion.div>
+
+            {/* Milestones & Rewards */}
+            <motion.div variants={item} className="mt-8 rounded-3xl border border-white/10 bg-black/40 backdrop-blur-xl p-6 md:p-8">
+              <div className="flex flex-row items-center gap-3 mb-6 border-b border-white/10 pb-4">
+                <span className="w-2 h-8 bg-yellow-500 rounded-full shrink-0" />
+                <h2 className="text-xl sm:text-2xl font-black text-white leading-tight uppercase tracking-tighter">
+                  Unlockables Roadmap
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[
+                  { lvl: 5, title: "Novice Title", desc: "Unlock the Novice Explorer title.", unlocked: level >= 5 },
+                  { lvl: 10, title: "Seasoned Title", desc: "Unlock the Seasoned Adventurer title.", unlocked: level >= 10 },
+                  { lvl: 20, title: "Quest Master", desc: "Unlock the Quest Master title.", unlocked: level >= 20 },
+                ].map((reward, i) => (
+                  <div key={i} className={`p-5 rounded-2xl border ${reward.unlocked ? 'border-yellow-500/30 bg-yellow-500/10' : 'border-white/5 bg-white/5'} flex flex-col items-center text-center relative overflow-hidden transition-all hover:scale-105 group`}>
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 ${reward.unlocked ? 'bg-yellow-500/20 text-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.4)]' : 'bg-black text-zinc-600 border border-white/10'}`}>
+                      {reward.unlocked ? <Shield size={24} /> : <Lock size={24} />}
+                    </div>
+                    <div className={`text-[10px] font-black uppercase tracking-widest mb-1 ${reward.unlocked ? 'text-yellow-500' : 'text-zinc-500'}`}>
+                      Level {reward.lvl}
+                    </div>
+                    <div className={`font-bold mb-2 ${reward.unlocked ? 'text-white' : 'text-zinc-400'}`}>{reward.title}</div>
+                    <div className="text-xs text-zinc-500">{reward.desc}</div>
+                    
+                    {reward.unlocked && (
+                      <div className="absolute -top-10 -right-10 w-24 h-24 bg-yellow-500/20 blur-2xl rounded-full pointer-events-none group-hover:bg-yellow-500/30 transition-colors" />
+                    )}
+                  </div>
+                ))}
               </div>
             </motion.div>
             

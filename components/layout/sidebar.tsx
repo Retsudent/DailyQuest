@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession, signOut } from "next-auth/react";
-import { useSidebar } from "@/components/providers/SidebarProvider";
+import BottomNav from "./bottom-nav";
 
 const menus = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -29,16 +29,7 @@ const menus = [
 export default function Sidebar() {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const { isOpen, close } = useSidebar();
-  const [isMobile, setIsMobile] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   useEffect(() => {
     const syncAvatar = () => {
@@ -63,32 +54,13 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={close}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] md:hidden"
-          />
-        )}
-      </AnimatePresence>
 
       <motion.aside
         initial={false}
-        animate={!isMobile ? "open" : (isOpen ? "open" : "closed")}
+        animate="open"
         variants={sidebarVariants}
-        className={`fixed inset-y-0 left-0 z-[70] flex flex-col w-72 bg-[#050508] border-r border-white/5 p-6 md:relative md:translate-x-0 md:flex transition-none`}
+        className="hidden md:flex fixed inset-y-0 left-0 z-[70] flex-col w-72 bg-[#050508] border-r border-white/5 p-6 md:relative md:translate-x-0 transition-none"
       >
-        {/* Mobile Close Button */}
-        <button
-          onClick={close}
-          className="absolute top-6 right-6 p-2 text-zinc-500 hover:text-white md:hidden"
-        >
-          <X size={24} />
-        </button>
 
         {/* Decorative side border glow */}
         <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-purple-500/50 to-transparent opacity-50" />
@@ -111,7 +83,7 @@ export default function Sidebar() {
             const isActive = pathname === menu.href;
 
             return (
-              <Link key={menu.name} href={menu.href} onClick={close}>
+              <Link key={menu.name} href={menu.href}>
                 <motion.div
                   whileHover={{ x: 5 }}
                   whileTap={{ scale: 0.98 }}
@@ -185,6 +157,7 @@ export default function Sidebar() {
           <p className="text-zinc-600 text-[10px] uppercase font-bold tracking-widest mt-4">v0.1.0-alpha</p>
         </div>
       </motion.aside>
+      <BottomNav />
     </>
   );
 }

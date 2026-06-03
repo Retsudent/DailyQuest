@@ -2,12 +2,13 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
-import { User, Mail, Camera, Shield } from "lucide-react";
+import { User, Mail, Camera, Shield, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
 import { notify } from "@/lib/ui/toast";
 
 export default function ProfileSettings() {
   const { update } = useSession();
+  const { signOut } = require("next-auth/react");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -192,13 +193,21 @@ export default function ProfileSettings() {
         </div>
       </div>
 
-      <div className="flex justify-end pt-6 border-t border-white/10 relative z-10">
+      <div className="flex flex-col-reverse md:flex-row justify-end gap-4 pt-6 border-t border-white/10 relative z-10">
+        <motion.button 
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => signOut({ callbackUrl: "/login" })}
+          className="md:hidden flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 font-black uppercase tracking-wider border border-red-500/30 transition-all"
+        >
+          <LogOut size={18} /> Disconnect
+        </motion.button>
         <motion.button 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleSaveProfile}
           disabled={isSaving || isLoading}
-          className="px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-wider shadow-[0_4px_0_rgb(37,99,235)] hover:shadow-[0_2px_0_rgb(37,99,235)] hover:translate-y-[2px] transition-all active:shadow-none active:translate-y-1"
+          className="px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-wider shadow-[0_4px_0_rgb(37,99,235)] hover:shadow-[0_2px_0_rgb(37,99,235)] hover:translate-y-[2px] transition-all active:shadow-none active:translate-y-1 text-center"
         >
           {isSaving ? "Saving..." : "Save Identity"}
         </motion.button>

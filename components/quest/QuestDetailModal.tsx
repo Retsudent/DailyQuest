@@ -141,10 +141,10 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-lg bg-[#0a0a0f] border border-white/10 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)]"
+            className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto themed-scrollbar bg-[#0a0a0f] border border-white/10 rounded-3xl overflow-x-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)]"
           >
             {/* Header / Banner */}
-            <div className={`h-32 w-full ${conf.bg} relative flex items-center justify-center overflow-hidden`}>
+            <div className={`h-24 sm:h-32 w-full ${conf.bg} relative flex items-center justify-center overflow-hidden shrink-0 sticky top-0 z-10`}>
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0f]" />
               <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px]" />
               
@@ -158,25 +158,24 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
               </motion.div>
             </div>
 
-            {/* Close Button */}
             <button 
               onClick={() => {
                 setIsEditing(false);
                 onClose();
               }}
-              className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/40 border border-white/10 flex items-center justify-center text-zinc-500 hover:text-white transition-colors"
+              className="absolute top-3 sm:top-4 right-3 sm:right-4 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/40 border border-white/10 flex items-center justify-center text-zinc-500 hover:text-white transition-colors"
             >
-              <X size={20} />
+              <X size={18} className="sm:w-5 sm:h-5" />
             </button>
 
             {/* Content */}
-            <div className="p-8 space-y-6">
+            <div className="p-5 sm:p-8 space-y-5 sm:space-y-6">
               {!isEditing ? (
                 <>
                   <div className="text-center space-y-2">
                     <div className={`text-[10px] font-black uppercase tracking-[0.3em] ${conf.color}`}>{quest.rarity} Mission</div>
-                    <h2 className="text-3xl font-black text-white tracking-tight leading-tight">{quest.title}</h2>
-                    <div className="flex items-center justify-center gap-4 text-xs font-bold text-zinc-500 uppercase tracking-widest pt-2">
+                    <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">{quest.title}</h2>
+                    <div className="flex items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-xs font-bold text-zinc-500 uppercase tracking-widest pt-2">
                       <span className="flex items-center gap-1.5"><Clock size={14} className="text-blue-400" /> {quest.type}</span>
                       <span className="flex items-center gap-1.5"><Trophy size={14} className="text-yellow-500" /> +{quest.xp} EXP</span>
                     </div>
@@ -207,7 +206,7 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
                     <button 
                       onClick={startEditing}
                       disabled={loading}
-                      className="flex items-center justify-center gap-2 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-black uppercase tracking-widest hover:bg-white/10 hover:border-blue-500/50 transition-all group disabled:opacity-50"
+                      className="flex items-center justify-center gap-2 py-3 sm:py-4 rounded-2xl bg-white/5 border border-white/10 text-xs sm:text-sm text-white font-black uppercase tracking-widest hover:bg-white/10 hover:border-blue-500/50 transition-all group disabled:opacity-50"
                     >
                       <Edit3 size={18} className="group-hover:text-blue-400 transition-colors" />
                       Edit
@@ -215,7 +214,7 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
                     <button 
                       onClick={handleDelete}
                       disabled={loading}
-                      className="flex items-center justify-center gap-2 py-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all group disabled:opacity-50"
+                      className="flex items-center justify-center gap-2 py-3 sm:py-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-xs sm:text-sm text-red-500 font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all group disabled:opacity-50"
                     >
                       <Trash2 size={18} />
                       {loading ? "Aborting..." : "Abort"}
@@ -227,7 +226,7 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
                     <button 
                       onClick={handleComplete}
                       disabled={loading}
-                      className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black uppercase tracking-widest shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] border border-blue-400/50 transition-all active:scale-[0.98] disabled:opacity-50"
+                      className="w-full py-3 sm:py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-xs sm:text-sm text-white font-black uppercase tracking-widest shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] border border-blue-400/50 transition-all active:scale-[0.98] disabled:opacity-50"
                     >
                       {loading ? "Processing..." : "Complete Objective"}
                     </button>
@@ -240,7 +239,7 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
                     <input 
                       required
                       type="text" 
-                      className="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3 text-white font-bold focus:outline-none focus:border-blue-500/50"
+                      className="w-full bg-black/50 border border-white/10 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-white font-bold focus:outline-none focus:border-blue-500/50"
                       value={editForm.title}
                       onChange={(e) => setEditForm({...editForm, title: e.target.value})}
                     />
@@ -250,7 +249,7 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
                     <div className="space-y-2">
                       <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Type</label>
                       <select 
-                        className="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3 text-white font-bold focus:outline-none focus:border-blue-500/50 appearance-none"
+                        className="w-full bg-black/50 border border-white/10 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-white font-bold focus:outline-none focus:border-blue-500/50 appearance-none"
                         value={editForm.type}
                         onChange={(e) => setEditForm({...editForm, type: e.target.value})}
                       >
@@ -264,7 +263,7 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
                       <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">XP</label>
                       <input 
                         type="number" 
-                        className="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3 text-white font-bold focus:outline-none focus:border-blue-500/50"
+                        className="w-full bg-black/50 border border-white/10 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-white font-bold focus:outline-none focus:border-blue-500/50"
                         value={editForm.xp}
                         onChange={(e) => setEditForm({...editForm, xp: parseInt(e.target.value)})}
                       />
@@ -300,7 +299,7 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
                     <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Description</label>
                     <textarea 
                       rows={3}
-                      className="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500/50 resize-none"
+                      className="w-full bg-black/50 border border-white/10 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm text-white focus:outline-none focus:border-blue-500/50 resize-none"
                       value={editForm.description}
                       onChange={(e) => setEditForm({...editForm, description: e.target.value})}
                       placeholder="Add mission details..."
@@ -311,14 +310,14 @@ export default function QuestDetailModal({ isOpen, onClose, quest }: QuestDetail
                     <button
                       type="button"
                       onClick={() => setIsEditing(false)}
-                      className="flex-1 py-4 rounded-2xl bg-white/5 text-zinc-400 font-black uppercase tracking-widest hover:bg-white/10 border border-white/5"
+                      className="flex-1 py-3 sm:py-4 rounded-2xl bg-white/5 text-xs sm:text-sm text-zinc-400 font-black uppercase tracking-widest hover:bg-white/10 border border-white/5"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={loading}
-                      className="flex-[2] py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black uppercase tracking-widest shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] border border-blue-400/50"
+                      className="flex-[2] py-3 sm:py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs sm:text-sm font-black uppercase tracking-widest shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] border border-blue-400/50"
                     >
                       {loading ? "Saving..." : "Save Intel"}
                     </button>

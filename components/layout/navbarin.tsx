@@ -3,7 +3,6 @@
 import { Bell, Search, Hexagon, Menu } from "lucide-react";
 import { motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
-import { useSidebar } from "@/components/providers/SidebarProvider";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type QuestItem = {
@@ -30,7 +29,6 @@ type NotificationItem = {
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { toggle } = useSidebar();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<"all" | "unread">("all");
@@ -255,14 +253,6 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 h-20 border-b border-white/5 bg-black/40 backdrop-blur-xl flex items-center justify-between px-6 md:px-8">
       <div className="flex items-center gap-4">
-        {/* Burger Menu for Mobile */}
-        <button
-          onClick={toggle}
-          className="p-2 text-zinc-400 hover:text-white md:hidden bg-white/5 rounded-lg border border-white/10"
-        >
-          <Menu size={20} />
-        </button>
-
         {/* HUD Path Indicator */}
         <div className="hidden sm:flex items-center gap-3">
           <Hexagon className="text-purple-500/50" size={16} />

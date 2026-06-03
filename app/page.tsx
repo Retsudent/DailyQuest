@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/navbar";
 import Hero from "@/components/landing/hero";
+import BeforeAfter from "@/components/landing/before-after";
 import Features from "@/components/landing/features";
 import Stats from "@/components/landing/stats";
 import CTA from "@/components/landing/cta";
@@ -11,6 +12,8 @@ export default function HomePage() {
       <Navbar />
 
       <Hero />
+
+      <BeforeAfter />
 
       <Stats />
 

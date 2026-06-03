@@ -71,13 +71,13 @@ export default function AddQuestModal({ isOpen, onClose, onCreated }: AddQuestMo
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-lg bg-[#0a0a0f] border border-white/10 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+            className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto themed-scrollbar bg-[#0a0a0f] border border-white/10 rounded-3xl overflow-x-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]"
           >
             {/* Top Glow Bar */}
             <div className="h-1.5 w-full bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 animate-gradient-x" />
 
             {/* Header */}
-            <div className="p-6 border-b border-white/5 flex items-center justify-between">
+            <div className="p-4 sm:p-6 border-b border-white/5 flex items-center justify-between sticky top-0 bg-[#0a0a0f]/90 backdrop-blur-md z-10">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
                   <Sword size={20} />
@@ -96,7 +96,7 @@ export default function AddQuestModal({ isOpen, onClose, onCreated }: AddQuestMo
             </div>
 
             {/* Form Body */}
-            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
               {/* Title Input */}
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-zinc-300 uppercase tracking-widest ml-1">Mission Title</label>
@@ -108,7 +108,7 @@ export default function AddQuestModal({ isOpen, onClose, onCreated }: AddQuestMo
                     required
                     type="text" 
                     placeholder="E.g. Defeat the Morning Grogginess"
-                    className="w-full bg-black/50 border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-white font-bold placeholder:text-zinc-700 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all shadow-inner"
+                    className="w-full bg-black/50 border border-white/10 rounded-2xl pl-10 sm:pl-12 pr-4 py-3 sm:py-4 text-sm sm:text-base text-white font-bold placeholder:text-zinc-700 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all shadow-inner"
                     value={formData.title}
                     onChange={(e) => setFormData({...formData, title: e.target.value})}
                   />
@@ -120,7 +120,7 @@ export default function AddQuestModal({ isOpen, onClose, onCreated }: AddQuestMo
                 <div className="space-y-2">
                   <label className="text-[10px] font-black text-zinc-300 uppercase tracking-widest ml-1">Quest Type</label>
                   <select 
-                    className="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-4 text-white font-bold focus:outline-none focus:border-blue-500/50 shadow-inner appearance-none cursor-pointer"
+                    className="w-full bg-black/50 border border-white/10 rounded-2xl px-3 sm:px-4 py-3 sm:py-4 text-sm sm:text-base text-white font-bold focus:outline-none focus:border-blue-500/50 shadow-inner appearance-none cursor-pointer"
                     value={formData.type}
                     onChange={(e) => setFormData({...formData, type: e.target.value})}
                   >
@@ -138,7 +138,7 @@ export default function AddQuestModal({ isOpen, onClose, onCreated }: AddQuestMo
                     </div>
                     <input 
                       type="number" 
-                      className="w-full bg-black/50 border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-white font-bold focus:outline-none focus:border-blue-500/50 shadow-inner"
+                      className="w-full bg-black/50 border border-white/10 rounded-2xl pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 text-sm sm:text-base text-white font-bold focus:outline-none focus:border-blue-500/50 shadow-inner"
                       value={formData.xp}
                       onChange={(e) =>
                         setFormData({
@@ -182,14 +182,14 @@ export default function AddQuestModal({ isOpen, onClose, onCreated }: AddQuestMo
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 py-4 rounded-2xl bg-white/5 text-zinc-400 font-black uppercase tracking-widest hover:bg-white/10 border border-white/5 transition-all"
+                  className="flex-1 py-3 sm:py-4 rounded-2xl bg-white/5 text-xs sm:text-sm text-zinc-400 font-black uppercase tracking-widest hover:bg-white/10 border border-white/5 transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-[2] py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black uppercase tracking-widest shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] border border-blue-400/50 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-[2] py-3 sm:py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs sm:text-sm font-black uppercase tracking-widest shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] border border-blue-400/50 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? "Forging Mission..." : "Confirm Mission"}
                 </button>

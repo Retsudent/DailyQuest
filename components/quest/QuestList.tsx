@@ -3,6 +3,7 @@ import QuestCard from "./QuestCard";
 import QuestDetailModal from "./QuestDetailModal";
 import { motion } from "framer-motion";
 import { notify } from "@/lib/ui/toast";
+import { Sword } from "lucide-react";
 
 interface Quest {
   id: string;
@@ -133,14 +134,17 @@ export default function QuestList({ search, filter, reloadToken = 0 }: QuestList
       </motion.div>
 
       {filteredQuests.length === 0 && (
-        <div className="mt-8 rounded-2xl border border-white/10 bg-black/40 p-8 text-center">
-          <h3 className="text-white font-black text-lg">Belum ada quest yang cocok</h3>
-          <p className="text-zinc-300 mt-2 text-sm">
-            Coba ubah filter atau buat quest baru untuk mulai progress.
+        <div className="mt-8 py-16 flex flex-col items-center justify-center text-center rounded-3xl border-2 border-dashed border-white/10 bg-black/20 shadow-inner">
+          <div className="w-24 h-24 bg-blue-500/10 rounded-full flex items-center justify-center mb-6 border border-blue-500/20 shadow-lg">
+            <Sword className="text-blue-400/50" size={40} />
+          </div>
+          <h3 className="text-2xl font-black text-zinc-300 uppercase tracking-widest mb-3">No Quests Found</h3>
+          <p className="text-zinc-500 mb-8 max-w-md text-sm leading-relaxed">
+            Your adventure log is empty for this category. Accept a new quest to continue your journey and earn EXP.
           </p>
           <button
             onClick={() => window.dispatchEvent(new Event("dq:open-add-quest"))}
-            className="mt-5 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-black uppercase tracking-wider"
+            className="px-8 py-3 rounded-xl bg-blue-600/20 hover:bg-blue-600 border border-blue-500/50 text-blue-300 hover:text-white font-black uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(37,99,235,0.2)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]"
           >
             + Forge Quest
           </button>
