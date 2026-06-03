@@ -1,5 +1,21 @@
 import { NextResponse } from "next/server";
 
+// DEBUG: GET handler to test API key validity
+export async function GET() {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return NextResponse.json({ status: "ERROR", message: "GEMINI_API_KEY not set" });
+
+  const testUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+  const res = await fetch(testUrl);
+  const body = await res.json();
+  return NextResponse.json({
+    status: res.status,
+    ok: res.ok,
+    keyPrefix: apiKey.substring(0, 8) + "...",
+    geminiResponse: res.ok ? "KEY VALID ✅" : body,
+  });
+}
+
 const VALID_RARITIES = ["common", "rare", "epic", "legendary"] as const;
 type Rarity = (typeof VALID_RARITIES)[number];
 
@@ -54,10 +70,11 @@ Return ONLY valid JSON like this (no markdown, no explanation):
     });
 
     if (!geminiRes.ok) {
-      const errBody = await geminiRes.text();
+      const errBody = await geminiRes.json().catch(() => geminiRes.text());
       console.error("Gemini API error:", geminiRes.status, errBody);
+      // Return full error detail so we can debug
       return NextResponse.json(
-        { error: `Gemini API returned ${geminiRes.status}` },
+        { error: `Gemini API returned ${geminiRes.status}`, detail: errBody },
         { status: 500 }
       );
     }
