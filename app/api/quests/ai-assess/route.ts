@@ -63,7 +63,8 @@ Return ONLY valid JSON like this (no markdown, no explanation):
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
           temperature: 0.2,
-          maxOutputTokens: 150,
+          maxOutputTokens: 256,
+          thinkingConfig: { thinkingBudget: 0 }, // disable thinking to avoid token waste
         },
       }),
     });
