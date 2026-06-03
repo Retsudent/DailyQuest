@@ -108,10 +108,12 @@ Return ONLY valid JSON like this (no markdown, no explanation):
         : 50;
 
     return NextResponse.json({ rarity, xp });
-  } catch (error) {
-    console.error("AI Assess Error:", error);
+  } catch (error: unknown) {
+    const errMsg = error instanceof Error ? error.message : String(error);
+    const errStack = error instanceof Error ? error.stack : undefined;
+    console.error("AI Assess Error:", errMsg, errStack);
     return NextResponse.json(
-      { error: "Failed to assess quest difficulty" },
+      { error: "Failed to assess quest difficulty", detail: errMsg },
       { status: 500 }
     );
   }
